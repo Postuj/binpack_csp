@@ -2,7 +2,7 @@
 
 This is a student project for solving the Bin Packing Problem using Constraint Satisfaction Problem (CSP) techniques.
 
-### Problem Description
+## Problem Description
 
 This is a problem of packing items into proper bins. The goal is to pack all items into the bins while satisfying a set of constraints.
 The problem is defined as follows:
@@ -49,3 +49,14 @@ the goal is to place items in the bins in such a way that all of the following c
 - Items of type `fruit` and `vegetable` cannot be placed together in the same bin
 - Items of type `seafood` and `meat` cannot be placed together in the same bin
 - All items are placed in bins
+
+## Running
+
+### Requirements
+
+1. Go version 1.20 or higher
+
+### Steps
+
+1. `cd libs/csp && go mod tidy`
+2. `go run main.go`
