@@ -4,6 +4,9 @@ This is a student project for solving the Bin Packing Problem using Constraint S
 
 ### Problem Description
 
+This is a problem of packing items into proper bins. The goal is to pack all items into the bins while satisfying a set of constraints.
+The problem is defined as follows:
+
 Given a set of bins with various types and sizes:
 
 | Name           | Type    | Capacity |

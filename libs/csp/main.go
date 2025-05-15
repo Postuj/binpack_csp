@@ -12,11 +12,10 @@ import (
 )
 
 func main() {
-	// Define bins
 	bins := []*entities.Bin{
 		entities.NewBin(0, "Crate", entities.REGULAR, 16),
 		entities.NewBin(1, "Box", entities.REGULAR, 16),
-		entities.NewBin(2, "Crate with ice", entities.COOLED, 32),
+		entities.NewBin(2, "Crate with ice", entities.COOLED, 24),
 		entities.NewBin(3, "Cooled box", entities.COOLED, 32),
 		entities.NewBin(4, "Fridge", entities.COOLED, 32),
 	}
@@ -38,27 +37,16 @@ func main() {
 	itemFactory.AddItem("Beef", 8, entities.MEAT)
 
 	items := itemFactory.GetItems()
-	constraints := centipede.Constraints[entities.Placement]{}
 
 	nonMixableItemTypes := []cspconstraints.NonMixableItemTypes{
 		{entities.FRUIT, entities.VEGETABLE},
 		{entities.MEAT, entities.SEAFOOD},
 	}
 
-	for _, constraintItem := range cspconstraints.AddPlacementsDontOverlapConstraints(items) {
-		constraints = append(constraints, constraintItem)
-	}
+	constraints := cspconstraints.MakeConstraints(items, nonMixableItemTypes)
+	propagators := propagations.MakePropagations(items)
 
-	for _, constraintItem := range cspconstraints.AddNonMixableItemTypesConstraints(items, nonMixableItemTypes) {
-		constraints = append(constraints, constraintItem)
-	}
-
-	propagators := centipede.Propagations[entities.Placement]{}
-	for _, item := range items {
-		propagators = append(propagators, propagations.AllocatedSlotPropagation(item))
-	}
-
-	ctx, cancel := context.WithTimeout(context.TODO(), 15*time.Minute)
+	ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
 	defer cancel()
 
 	vars := itemFactory.GetAllVariables()
