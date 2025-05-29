@@ -2,20 +2,20 @@ package cspconstraints
 
 import (
 	"github.com/gnboorse/centipede"
-	"github.com/postuj/binpack_csp/libs/csp/entities"
+	"github.com/postuj/binpack_csp/libs/csp/cspentities"
 )
 
 func PlacementsInBinDontOverlap(
-	item1, item2 *entities.Item,
-) centipede.Constraint[entities.Placement] {
+	item1, item2 *cspentities.Item,
+) centipede.Constraint[cspentities.Placement] {
 	item1PlacementVarName := item1.GetPlacementVarName()
 	item2PlacementVarName := item2.GetPlacementVarName()
 	size1 := item1.GetSize()
 	size2 := item2.GetSize()
 
-	return centipede.Constraint[entities.Placement]{
+	return centipede.Constraint[cspentities.Placement]{
 		Vars: centipede.VariableNames{item1PlacementVarName, item2PlacementVarName},
-		ConstraintFunction: func(variables *centipede.Variables[entities.Placement]) bool {
+		ConstraintFunction: func(variables *centipede.Variables[cspentities.Placement]) bool {
 			placement1 := variables.Find(item1PlacementVarName)
 			placement2 := variables.Find(item2PlacementVarName)
 
@@ -36,9 +36,9 @@ func PlacementsInBinDontOverlap(
 }
 
 func AddPlacementsDontOverlapConstraints(
-	items []*entities.Item,
-) []centipede.Constraint[entities.Placement] {
-	constraints := make([]centipede.Constraint[entities.Placement], 0)
+	items []*cspentities.Item,
+) []centipede.Constraint[cspentities.Placement] {
+	constraints := make([]centipede.Constraint[cspentities.Placement], 0)
 
 	for i := 0; i < len(items); i++ {
 		for j := i + 1; j < len(items); j++ {

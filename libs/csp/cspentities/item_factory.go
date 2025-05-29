@@ -1,14 +1,17 @@
-package entities
+package cspentities
 
-import "github.com/gnboorse/centipede"
+import (
+	"github.com/gnboorse/centipede"
+	"github.com/postuj/binpack_csp/libs/core/entities"
+)
 
 type itemFactory struct {
-	bins  []*Bin
+	bins  []*entities.Bin
 	items []*Item
 	vars  []centipede.Variable[Placement]
 }
 
-func NewItemFactory(bins []*Bin) *itemFactory {
+func NewItemFactory(bins []*entities.Bin) *itemFactory {
 	return &itemFactory{
 		bins:  bins,
 		items: make([]*Item, 0),
@@ -16,7 +19,7 @@ func NewItemFactory(bins []*Bin) *itemFactory {
 	}
 }
 
-func (f *itemFactory) AddItem(name string, size int, itemType ItemType) *Item {
+func (f *itemFactory) AddItem(name string, size int, itemType entities.ItemType) *Item {
 	itemId := len(f.items)
 	item := &Item{
 		id:       itemId,
@@ -44,7 +47,7 @@ func (f *itemFactory) GetAllVariables() []centipede.Variable[Placement] {
 	return f.vars
 }
 
-func getPossibleBinIds(binType BinType, bins []*Bin) []int {
+func getPossibleBinIds(binType entities.BinType, bins []*entities.Bin) []int {
 	possibleBinIds := make([]int, 0)
 	for _, bin := range bins {
 		if binType == bin.GetType() {

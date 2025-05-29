@@ -2,16 +2,17 @@ package cspconstraints
 
 import (
 	"github.com/gnboorse/centipede"
-	"github.com/postuj/binpack_csp/libs/csp/entities"
+	"github.com/postuj/binpack_csp/libs/core/entities"
+	"github.com/postuj/binpack_csp/libs/csp/cspentities"
 )
 
-func NotMixed(item1, item2 *entities.Item) centipede.Constraint[entities.Placement] {
+func NotMixed(item1, item2 *cspentities.Item) centipede.Constraint[cspentities.Placement] {
 	item1PlacementVarName := item1.GetPlacementVarName()
 	item2PlacementVarName := item2.GetPlacementVarName()
 
-	return centipede.Constraint[entities.Placement]{
+	return centipede.Constraint[cspentities.Placement]{
 		Vars: centipede.VariableNames{item1PlacementVarName, item2PlacementVarName},
-		ConstraintFunction: func(variables *centipede.Variables[entities.Placement]) bool {
+		ConstraintFunction: func(variables *centipede.Variables[cspentities.Placement]) bool {
 			placement1 := variables.Find(item1PlacementVarName)
 			placement2 := variables.Find(item2PlacementVarName)
 
@@ -27,9 +28,9 @@ func NotMixed(item1, item2 *entities.Item) centipede.Constraint[entities.Placeme
 type NonMixableItemTypes [2]entities.ItemType
 
 func findItemsOfType(
-	itemsMap map[entities.ItemType][]*entities.Item,
+	itemsMap map[entities.ItemType][]*cspentities.Item,
 	itemType entities.ItemType,
-) []*entities.Item {
+) []*cspentities.Item {
 	if items, ok := itemsMap[itemType]; ok {
 		return items
 	}
@@ -37,15 +38,15 @@ func findItemsOfType(
 }
 
 func AddNonMixableItemTypesConstraints(
-	items []*entities.Item,
+	items []*cspentities.Item,
 	nonMixableItemTypes []NonMixableItemTypes,
-) []centipede.Constraint[entities.Placement] {
-	constraints := make([]centipede.Constraint[entities.Placement], 0)
-	itemsMap := make(map[entities.ItemType][]*entities.Item)
+) []centipede.Constraint[cspentities.Placement] {
+	constraints := make([]centipede.Constraint[cspentities.Placement], 0)
+	itemsMap := make(map[entities.ItemType][]*cspentities.Item)
 	for _, item := range items {
 		itemType := item.GetType()
 		if _, ok := itemsMap[itemType]; !ok {
-			itemsMap[itemType] = make([]*entities.Item, 0)
+			itemsMap[itemType] = make([]*cspentities.Item, 0)
 		}
 		itemsMap[itemType] = append(itemsMap[itemType], item)
 	}

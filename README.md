@@ -58,5 +58,4 @@ the goal is to place items in the bins in such a way that all of the following c
 
 ### Steps
 
-1. `cd libs/csp && go mod tidy`
-2. `go run main.go`
+1. `go run ./app`

@@ -2,14 +2,14 @@ package cspconstraints
 
 import (
 	"github.com/gnboorse/centipede"
-	"github.com/postuj/binpack_csp/libs/csp/entities"
+	"github.com/postuj/binpack_csp/libs/csp/cspentities"
 )
 
 func MakeConstraints(
-	items []*entities.Item,
+	items []*cspentities.Item,
 	nonMixableItemTypes []NonMixableItemTypes,
-) centipede.Constraints[entities.Placement] {
-	constraints := centipede.Constraints[entities.Placement]{}
+) centipede.Constraints[cspentities.Placement] {
+	constraints := centipede.Constraints[cspentities.Placement]{}
 
 	constraints = append(constraints, AddPlacementsDontOverlapConstraints(items)...)
 	constraints = append(

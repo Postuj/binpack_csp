@@ -2,20 +2,20 @@ package propagations
 
 import (
 	"github.com/gnboorse/centipede"
-	"github.com/postuj/binpack_csp/libs/csp/entities"
+	"github.com/postuj/binpack_csp/libs/csp/cspentities"
 )
 
-func AllocatedSlotPropagation(item *entities.Item) centipede.Propagation[entities.Placement] {
+func AllocatedSlotPropagation(item *cspentities.Item) centipede.Propagation[cspentities.Placement] {
 	placementVarName := item.GetPlacementVarName()
-	return centipede.Propagation[entities.Placement]{
+	return centipede.Propagation[cspentities.Placement]{
 		Vars: centipede.VariableNames{placementVarName},
 		PropagationFunction: func(
-			asassignment centipede.VariableAssignment[entities.Placement],
-			variables *centipede.Variables[entities.Placement],
-		) []centipede.DomainRemoval[entities.Placement] {
+			asassignment centipede.VariableAssignment[cspentities.Placement],
+			variables *centipede.Variables[cspentities.Placement],
+		) []centipede.DomainRemoval[cspentities.Placement] {
 			binId := asassignment.Value.BinId
 			offset := asassignment.Value.Offset
-			removals := make([]centipede.DomainRemoval[entities.Placement], 0)
+			removals := make([]centipede.DomainRemoval[cspentities.Placement], 0)
 
 			for _, variable := range *variables {
 				if variable.Name == placementVarName {
@@ -28,7 +28,7 @@ func AllocatedSlotPropagation(item *entities.Item) centipede.Propagation[entitie
 					}
 
 					if dom.Offset >= offset && dom.Offset < offset+item.GetSize() {
-						removals = append(removals, centipede.DomainRemoval[entities.Placement]{
+						removals = append(removals, centipede.DomainRemoval[cspentities.Placement]{
 							VariableName: variable.Name,
 							Value:        dom,
 						})

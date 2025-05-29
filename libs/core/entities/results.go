@@ -2,8 +2,7 @@ package entities
 
 import (
 	"fmt"
-
-	"github.com/gnboorse/centipede"
+	"time"
 )
 
 type AllocatedItem struct {
@@ -47,6 +46,8 @@ func (a *AllocatedBin) String() string {
 
 type AllocationResult struct {
 	AllocatedBins []*AllocatedBin `json:"allocatedBins"`
+	Success       bool            `json:"success"`
+	Time          time.Duration   `json:"time"`
 }
 
 func (a *AllocationResult) String() string {
@@ -55,37 +56,4 @@ func (a *AllocationResult) String() string {
 		out += bin.String()
 	}
 	return out
-}
-
-func NewAlocationResult(
-	items []*Item,
-	bins []*Bin,
-	solvedState centipede.CSPState[Placement],
-) *AllocationResult {
-	allocatedBins := make([]*AllocatedBin, len(bins))
-	for i, bin := range bins {
-		allocatedBins[i] = &AllocatedBin{
-			Id:       bin.GetID(),
-			Name:     bin.GetName(),
-			Capacity: bin.GetCapacity(),
-			Type:     bin.GetType(),
-			Items:    make([]*AllocatedItem, 0),
-		}
-	}
-
-	for _, item := range items {
-		placement := solvedState.Vars.Find(item.GetPlacementVarName()).Value
-
-		bin := allocatedBins[placement.BinId]
-		bin.Items = append(bin.Items, &AllocatedItem{
-			Id:     item.GetID(),
-			Name:   item.GetName(),
-			Size:   item.GetSize(),
-			Offset: placement.Offset,
-		})
-	}
-
-	return &AllocationResult{
-		AllocatedBins: allocatedBins,
-	}
 }

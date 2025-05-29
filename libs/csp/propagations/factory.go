@@ -2,13 +2,13 @@ package propagations
 
 import (
 	"github.com/gnboorse/centipede"
-	"github.com/postuj/binpack_csp/libs/csp/entities"
+	"github.com/postuj/binpack_csp/libs/csp/cspentities"
 )
 
 func MakePropagations(
-	items []*entities.Item,
-) centipede.Propagations[entities.Placement] {
-	propagators := centipede.Propagations[entities.Placement]{}
+	items []*cspentities.Item,
+) centipede.Propagations[cspentities.Placement] {
+	propagators := centipede.Propagations[cspentities.Placement]{}
 	for _, item := range items {
 		propagators = append(propagators, AllocatedSlotPropagation(item))
 	}
